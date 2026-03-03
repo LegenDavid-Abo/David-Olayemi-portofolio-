@@ -1,0 +1,907 @@
+
+html_content = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Olayemi | Full Stack Developer & AI Specialist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer base {
+            :root {
+                --primary: #6366f1;
+                --primary-dark: #4f46e5;
+                --accent: #06b6d4;
+                --gold: #fbbf24;
+            }
+            body {
+                font-family: 'Inter', sans-serif;
+                background: #0a0a0a;
+                color: #ffffff;
+                overflow-x: hidden;
+            }
+            .font-display {
+                font-family: 'Space Grotesk', sans-serif;
+            }
+        }
+        
+        @layer components {
+            .gradient-text {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .glow-effect {
+                box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+            }
+            .premium-border {
+                position: relative;
+                background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(6, 182, 212, 0.1));
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .premium-border::before {
+                content: '';
+                position: absolute;
+                inset: -1px;
+                border-radius: inherit;
+                padding: 1px;
+                background: linear-gradient(135deg, #6366f1, #06b6d4, #fbbf24);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                opacity: 0.5;
+            }
+            .floating {
+                animation: float 6s ease-in-out infinite;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-20px); }
+            }
+            .gradient-orb {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(80px);
+                opacity: 0.4;
+                animation: pulse 8s ease-in-out infinite;
+            }
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); opacity: 0.4; }
+                50% { transform: scale(1.2); opacity: 0.6; }
+            }
+            .scroll-reveal {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            }
+            .scroll-reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .skill-bar {
+                position: relative;
+                overflow: hidden;
+            }
+            .skill-bar::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                animation: shimmer 2s infinite;
+            }
+            @keyframes shimmer {
+                0% { left: -100%; }
+                100% { left: 100%; }
+            }
+            .chat-message {
+                animation: slideIn 0.3s ease-out;
+            }
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .typing-dot {
+                animation: typing 1.4s infinite ease-in-out both;
+            }
+            .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+            .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+            @keyframes typing {
+                0%, 80%, 100% { transform: scale(0); }
+                40% { transform: scale(1); }
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="gradient-orb w-96 h-96 bg-indigo-600 top-0 left-0"></div>
+        <div class="gradient-orb w-80 h-80 bg-cyan-500 top-1/3 right-0" style="animation-delay: -2s;"></div>
+        <div class="gradient-orb w-72 h-72 bg-purple-600 bottom-0 left-1/3" style="animation-delay: -4s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-card border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-display text-2xl font-bold gradient-text">DO.</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="#experience" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Experience</a>
+                <a href="#projects" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Projects</a>
+                <a href="#contact" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Contact</a>
+            </div>
+            <button onclick="toggleChat()" class="md:hidden p-2 glass-card rounded-lg">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 scroll-reveal">
+                <div class="inline-flex items-center space-x-2 glass-card px-4 py-2 rounded-full">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium text-gray-300">Available for Opportunities</span>
+                </div>
+                <h1 class="font-display text-5xl md:text-7xl font-bold leading-tight">
+                    David <span class="gradient-text">Olayemi</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-400 font-light">
+                    Full Stack Developer <span class="text-indigo-400">|</span> AWS <span class="text-indigo-400">|</span> Machine Learning <span class="text-indigo-400">|</span> AI <span class="text-indigo-400">|</span> Automation
+                </p>
+                <p class="text-gray-400 text-lg leading-relaxed max-w-lg">
+                    Innovative developer crafting intelligent applications that drive efficiency and deliver measurable business impact. Recognized leader in ML & AI competitions.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#contact" class="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full font-semibold overflow-hidden transition-transform hover:scale-105">
+                        <span class="relative z-10">Get In Touch</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </a>
+                    <a href="https://github.com/LegenDavid-Abo/" target="_blank" class="px-8 py-4 glass-card rounded-full font-semibold hover:bg-white/10 transition-all flex items-center space-x-2">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                        <span>View GitHub</span>
+                    </a>
+                </div>
+            </div>
+            <div class="relative scroll-reveal">
+                <div class="relative w-full aspect-square max-w-md mx-auto">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-3xl transform rotate-6"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-600/20 to-blue-600/20 rounded-3xl transform -rotate-6"></div>
+                    <div class="relative glass-card rounded-3xl p-8 h-full flex flex-col items-center justify-center text-center floating">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6">
+                            <span class="font-display text-4xl font-bold">DO</span>
+                        </div>
+                        <div class="space-y-4 w-full">
+                            <div class="flex items-center justify-center space-x-2 text-gray-300">
+                                <i data-lucide="mail" class="w-5 h-5 text-indigo-400"></i>
+                                <span class="text-sm">olabolade999@gmail.com</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-2 text-gray-300">
+                                <i data-lucide="phone" class="w-5 h-5 text-indigo-400"></i>
+                                <span class="text-sm">09022996320</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-2 text-gray-300">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-indigo-400"></i>
+                                <span class="text-sm">Nigeria / Dubai / Germany</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex space-x-4">
+                            <div class="glass-card p-3 rounded-lg">
+                                <i data-lucide="award" class="w-6 h-6 text-yellow-400"></i>
+                            </div>
+                            <div class="glass-card p-3 rounded-lg">
+                                <i data-lucide="trophy" class="w-6 h-6 text-yellow-400"></i>
+                            </div>
+                            <div class="glass-card p-3 rounded-lg">
+                                <i data-lucide="star" class="w-6 h-6 text-yellow-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-6 text-center scroll-reveal">
+                    <div class="text-4xl font-bold gradient-text mb-2">30%</div>
+                    <div class="text-sm text-gray-400">Efficiency Increase</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="text-4xl font-bold gradient-text mb-2">40%</div>
+                    <div class="text-sm text-gray-400">Workflow Reduction</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="text-4xl font-bold gradient-text mb-2">3+</div>
+                    <div class="text-sm text-gray-400">Countries Worked</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center scroll-reveal" style="transition-delay: 0.3s;">
+                    <div class="text-4xl font-bold gradient-text mb-2">2nd</div>
+                    <div class="text-sm text-gray-400">ML Competition</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="scroll-reveal">
+                    <h2 class="font-display text-4xl font-bold mb-6">Professional <span class="gradient-text">Summary</span></h2>
+                    <p class="text-gray-400 text-lg leading-relaxed mb-6">
+                        Innovative Full Stack Developer and AI enthusiast with expertise in AWS, Machine Learning, and Automation. Skilled at designing intelligent applications and solutions that drive efficiency and deliver measurable business impact.
+                    </p>
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        Proven leader with a track record of successfully managing projects, developing cutting-edge chatbots, and implementing automation pipelines that optimize workflows. Recognized for excellence in ML & AI competitions and leadership in multi-national projects.
+                    </p>
+                </div>
+                <div class="space-y-6 scroll-reveal">
+                    <h3 class="font-display text-2xl font-bold mb-4">Core Skills</h3>
+                    <div class="space-y-4">
+                        <div class="premium-border rounded-xl p-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Full Stack Development</span>
+                                <span class="text-indigo-400">95%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="premium-border rounded-xl p-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">AWS & Cloud Integration</span>
+                                <span class="text-indigo-400">90%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="premium-border rounded-xl p-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Machine Learning & AI</span>
+                                <span class="text-indigo-400">92%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="premium-border rounded-xl p-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Automation & Chatbots</span>
+                                <span class="text-indigo-400">88%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="skill-bar h-full bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-4xl font-bold text-center mb-16 scroll-reveal">Work <span class="gradient-text">Experience</span></h2>
+            <div class="space-y-8">
+                <!-- MTN Nigeria -->
+                <div class="glass-card rounded-2xl p-8 scroll-reveal glow-effect">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">Full Stack Developer</h3>
+                            <p class="text-indigo-400 font-medium">MTN Nigeria</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-400 mt-2 md:mt-0">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span class="text-sm">Nigeria</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Developed internal automation tools, increasing operational efficiency by 30%</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Designed AI solutions for customer insights and predictive analytics</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Led a small team to deliver cross-departmental software projects successfully</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Emirates Tech -->
+                <div class="glass-card rounded-2xl p-8 scroll-reveal">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">Software Engineer</h3>
+                            <p class="text-indigo-400 font-medium">Emirates Tech Solutions</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-400 mt-2 md:mt-0">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span class="text-sm">Dubai, UAE</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Engineered scalable web applications with AWS cloud infrastructure</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Implemented ML models for personalized customer experiences, improving engagement metrics</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Coordinated with international teams to ensure timely, high-quality project delivery</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- TechNova -->
+                <div class="glass-card rounded-2xl p-8 scroll-reveal">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">AI & Automation Specialist</h3>
+                            <p class="text-indigo-400 font-medium">TechNova Solutions</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-400 mt-2 md:mt-0">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span class="text-sm">Germany</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Created Portillo Chatbot, an AI-driven assistant for business insights optimization</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0"></i>
+                            <span>Built automation pipelines that reduced manual workflows by 40%</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <i data-lucide="award" class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-yellow-400">Awarded Best Leading Innovator for outstanding leadership and project execution</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-4xl font-bold text-center mb-16 scroll-reveal">Featured <span class="gradient-text">Projects</span></h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Portillo Chatbot -->
+                <div class="group premium-border rounded-2xl p-1 scroll-reveal">
+                    <div class="glass-card rounded-2xl p-6 h-full hover:bg-white/5 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-indigo-600/20 rounded-lg">
+                                <i data-lucide="bot" class="w-8 h-8 text-indigo-400"></i>
+                            </div>
+                            <span class="text-xs font-medium px-3 py-1 bg-indigo-600/20 rounded-full text-indigo-300">AI/NLP</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-indigo-400 transition-colors">Portillo Chatbot</h3>
+                        <p class="text-gray-400 text-sm mb-4">AI-powered assistant for retrieving, summarizing, and analyzing personal and business background information.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Python</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">NLP</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">AWS</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">AI APIs</span>
+                        </div>
+                        <div class="flex items-center text-green-400 text-sm">
+                            <i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>
+                            <span>Improved information retrieval speed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Face Swapping -->
+                <div class="group premium-border rounded-2xl p-1 scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="glass-card rounded-2xl p-6 h-full hover:bg-white/5 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-purple-600/20 rounded-lg">
+                                <i data-lucide="scan-face" class="w-8 h-8 text-purple-400"></i>
+                            </div>
+                            <span class="text-xs font-medium px-3 py-1 bg-purple-600/20 rounded-full text-purple-300">Computer Vision</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">AI Face Swapping System</h3>
+                        <p class="text-gray-400 text-sm mb-4">Deep learning-based computer vision system for accurate face swapping in images with seamless blending.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Python</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">OpenCV</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Deep Learning</span>
+                        </div>
+                        <div class="flex items-center text-green-400 text-sm">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                            <span>High accuracy facial landmark detection</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AWS ML Pipeline -->
+                <div class="group premium-border rounded-2xl p-1 scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="glass-card rounded-2xl p-6 h-full hover:bg-white/5 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-cyan-600/20 rounded-lg">
+                                <i data-lucide="cloud" class="w-8 h-8 text-cyan-400"></i>
+                            </div>
+                            <span class="text-xs font-medium px-3 py-1 bg-cyan-600/20 rounded-full text-cyan-300">Cloud/ML Ops</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-cyan-400 transition-colors">AWS ML Model Pipeline</h3>
+                        <p class="text-gray-400 text-sm mb-4">End-to-end deployment of ML models to cloud infrastructure for real-time predictions via APIs.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">AWS EC2</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">S3</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Python</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">API</span>
+                        </div>
+                        <div class="flex items-center text-green-400 text-sm">
+                            <i data-lucide="server" class="w-4 h-4 mr-1"></i>
+                            <span>Scalable production-ready systems</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bird Detection -->
+                <div class="group premium-border rounded-2xl p-1 scroll-reveal" style="transition-delay: 0.3s;">
+                    <div class="glass-card rounded-2xl p-6 h-full hover:bg-white/5 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-green-600/20 rounded-lg">
+                                <i data-lucide="bird" class="w-8 h-8 text-green-400"></i>
+                            </div>
+                            <span class="text-xs font-medium px-3 py-1 bg-green-600/20 rounded-full text-green-300">Full Stack</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-green-400 transition-colors">Bird Detection & Classification</h3>
+                        <p class="text-gray-400 text-sm mb-4">Flask web app using CNN models to detect and classify birds from uploaded images with complete ML pipeline.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Python</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Flask</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">CNN</span>
+                            <span class="text-xs px-2 py-1 bg-white/5 rounded">Computer Vision</span>
+                        </div>
+                        <div class="flex items-center text-green-400 text-sm">
+                            <i data-lucide="layout" class="w-4 h-4 mr-1"></i>
+                            <span>End-to-end web interface</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-4xl font-bold text-center mb-16 scroll-reveal">Achievements & <span class="gradient-text">Awards</span></h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-card rounded-2xl p-8 text-center scroll-reveal border border-yellow-500/30">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                        <i data-lucide="trophy" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">2nd Place</h3>
+                    <p class="text-gray-400">ML, AI & Automation Competition</p>
+                </div>
+                <div class="glass-card rounded-2xl p-8 text-center scroll-reveal border border-indigo-500/30" style="transition-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center">
+                        <i data-lucide="award" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Best Leading Innovator</h3>
+                    <p class="text-gray-400">Outstanding Leadership & Technical Excellence</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certs -->
+    <section class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="scroll-reveal">
+                    <h3 class="font-display text-2xl font-bold mb-6 flex items-center">
+                        <i data-lucide="graduation-cap" class="w-6 h-6 mr-2 text-indigo-400"></i>
+                        Education
+                    </h3>
+                    <div class="glass-card rounded-2xl p-6">
+                        <h4 class="text-lg font-bold mb-1">B.Sc. Computer Science</h4>
+                        <p class="text-indigo-400 mb-2">University of Lokoja, Nigeria</p>
+                        <p class="text-sm text-gray-400">2021 – 2024</p>
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <p class="text-sm text-gray-300">Developed multiple AI and Full Stack projects demonstrating applied technical skills</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll-reveal" style="transition-delay: 0.1s;">
+                    <h3 class="font-display text-2xl font-bold mb-6 flex items-center">
+                        <i data-lucide="badge-check" class="w-6 h-6 mr-2 text-indigo-400"></i>
+                        Certifications
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="glass-card rounded-xl p-4 flex items-center space-x-4">
+                            <div class="p-2 bg-green-600/20 rounded-lg">
+                                <i data-lucide="file-code" class="w-6 h-6 text-green-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Python Programming</h4>
+                                <p class="text-sm text-gray-400">Certified</p>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-xl p-4 flex items-center space-x-4">
+                            <div class="p-2 bg-purple-600/20 rounded-lg">
+                                <i data-lucide="brain" class="w-6 h-6 text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Machine Learning & AI</h4>
+                                <p class="text-sm text-gray-400">Certified</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass-card rounded-3xl p-8 md:p-12 scroll-reveal">
+                <h2 class="font-display text-4xl font-bold text-center mb-4">Let's Work <span class="gradient-text">Together</span></h2>
+                <p class="text-center text-gray-400 mb-12">Have a project in mind? Let's create something amazing.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <a href="mailto:olabolade999@gmail.com" class="group p-6 glass-card rounded-2xl text-center hover:bg-white/10 transition-all">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-indigo-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="mail" class="w-6 h-6 text-indigo-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">Email</h3>
+                        <p class="text-sm text-gray-400">olabolade999@gmail.com</p>
+                    </a>
+                    <a href="tel:09022996320" class="group p-6 glass-card rounded-2xl text-center hover:bg-white/10 transition-all">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-purple-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="phone" class="w-6 h-6 text-purple-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">Phone</h3>
+                        <p class="text-sm text-gray-400">09022996320</p>
+                    </a>
+                    <a href="https://github.com/LegenDavid-Abo/" target="_blank" class="group p-6 glass-card rounded-2xl text-center hover:bg-white/10 transition-all">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-cyan-600/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="github" class="w-6 h-6 text-cyan-400"></i>
+                        </div>
+                        <h3 class="font-semibold mb-1">GitHub</h3>
+                        <p class="text-sm text-gray-400">@LegenDavid-Abo</p>
+                    </a>
+                </div>
+
+                <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message sent! David will get back to you soon.');">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Name</label>
+                            <input type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition-colors" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Subject</label>
+                        <input type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Project inquiry">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Message</label>
+                        <textarea rows="4" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition-colors resize-none" placeholder="Tell me about your project..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Send Message</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-400">© 2024 David Olayemi. All rights reserved.</p>
+            <p class="text-sm text-gray-500 mt-2">Built with passion and AI innovation</p>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot Widget -->
+    <div id="chatbot" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden mb-4 w-96 h-[500px] glass-card rounded-2xl border border-white/20 overflow-hidden flex flex-col shadow-2xl">
+            <!-- Header -->
+            <div class="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold">David AI Assistant</h3>
+                        <p class="text-xs text-white/80">Ask me anything about David</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="p-1 hover:bg-white/20 rounded">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Messages -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="chat-message flex items-start space-x-2">
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="glass-card rounded-2xl rounded-tl-none px-4 py-2 max-w-[80%]">
+                        <p class="text-sm">Hi! I'm David's AI assistant. I can tell you about his experience, skills, projects, or achievements. What would you like to know? 🤖</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Questions -->
+            <div class="px-4 py-2 border-t border-white/10">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="askQuestion('What is David\'s experience?')" class="text-xs px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full transition-colors">Experience?</button>
+                    <button onclick="askQuestion('Tell me about his projects')" class="text-xs px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full transition-colors">Projects?</button>
+                    <button onclick="askQuestion('What skills does David have?')" class="text-xs px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full transition-colors">Skills?</button>
+                    <button onclick="askQuestion('How can I contact David?')" class="text-xs px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full transition-colors">Contact?</button>
+                </div>
+            </div>
+            
+            <!-- Input -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex space-x-2">
+                    <input type="text" id="chat-input" placeholder="Type your question..." 
+                           class="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 text-sm"
+                           onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="p-2 bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toggle Button -->
+        <button onclick="toggleChat()" id="chat-toggle" class="w-14 h-14 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full shadow-lg hover:shadow-indigo-500/50 transition-all hover:scale-110 flex items-center justify-center">
+            <i data-lucide="message-circle" class="w-7 h-7"></i>
+        </button>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+        // Chatbot Logic
+        const knowledgeBase = {
+            'experience': `David has extensive experience across three countries:
+• <strong>MTN Nigeria</strong> - Full Stack Developer (30% efficiency increase)
+• <strong>Emirates Tech Solutions, Dubai</strong> - Software Engineer (AWS & ML)
+• <strong>TechNova Solutions, Germany</strong> - AI & Automation Specialist (40% workflow reduction)`,
+            
+            'skills': `David's technical expertise includes:
+<strong>Hard Skills:</strong>
+• Full Stack Development (95%)
+• AWS & Cloud Integration (90%)
+• Machine Learning & AI (92%)
+• Python, Automation, Chatbot Development
+• Data Analysis & Computer Vision
+
+<strong>Soft Skills:</strong>
+• Leadership & Project Management
+• Strategic Problem Solving
+• Team Collaboration`,
+            
+            'projects': `David's key projects:
+
+1. <strong>Portillo Chatbot</strong> - AI assistant for business insights (Python, NLP, AWS)
+2. <strong>AI Face Swapping System</strong> - Deep learning computer vision (OpenCV, DL)
+3. <strong>AWS ML Pipeline</strong> - Cloud deployment for real-time predictions
+4. <strong>Bird Detection App</strong> - Flask web app with CNN classification`,
+            
+            'education': `David holds a <strong>B.Sc. in Computer Science</strong> from University of Lokoja, Nigeria (2021-2024).
+
+Achievements during studies:
+• 2nd Place in ML, AI & Automation Competition
+• Developed multiple AI and Full Stack projects`,
+            
+            'awards': `David's recognitions:
+• 🥈 <strong>2nd Place</strong> - ML, AI & Automation Competition
+• 🏆 <strong>Best Leading Innovator Award</strong> - Outstanding leadership and technical excellence at TechNova Solutions`,
+            
+            'contact': `You can reach David through:
+📧 Email: olabolade999@gmail.com
+📱 Phone: 09022996320
+🐙 GitHub: https://github.com/LegenDavid-Abo/
+
+Or fill out the contact form on this page!`,
+            
+            'certifications': `David is certified in:
+• ✅ Python Programming
+• ✅ Machine Learning & Artificial Intelligence`,
+            
+            'default': `I can tell you about David's:
+• Professional experience at MTN, Emirates Tech, and TechNova
+• Technical skills in Full Stack, AWS, ML/AI
+• Projects like Portillo Chatbot and Face Swapping System
+• Education and certifications
+• Awards and achievements
+• Contact information
+
+What would you like to know?`
+        };
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatToggle = document.getElementById('chat-toggle');
+            
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+                chatToggle.classList.add('hidden');
+            } else {
+                chatWindow.classList.add('hidden');
+                chatToggle.classList.remove('hidden');
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('chat-input').value = question;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTyping();
+            
+            // Generate response
+            setTimeout(() => {
+                removeTyping();
+                const response = generateResponse(message);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message flex items-start space-x-2';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex-1"></div>
+                    <div class="glass-card bg-indigo-600/30 rounded-2xl rounded-tr-none px-4 py-2 max-w-[80%]">
+                        <p class="text-sm">${text}</p>
+                    </div>
+                    <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                    </div>
+                    <div class="glass-card rounded-2xl rounded-tl-none px-4 py-2 max-w-[80%]">
+                        <p class="text-sm">${text}</p>
+                    </div>
+                `;
+            }
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            lucide.createIcons();
+        }
+
+        function showTyping() {
+            const messagesDiv = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'chat-message flex items-start space-x-2';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="bot" class="w-4 h-4"></i>
+                </div>
+                <div class="glass-card rounded-2xl rounded-tl-none px-4 py-3">
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function removeTyping() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        function generateResponse(input) {
+            const lower = input.toLowerCase();
+            
+            if (lower.includes('experience') || lower.includes('work') || lower.includes('job') || lower.includes('career')) {
+                return knowledgeBase.experience;
+            } else if (lower.includes('skill') || lower.includes('tech') || lower.includes('stack') || lower.includes('know')) {
+                return knowledgeBase.skills;
+            } else if (lower.includes('project') || lower.includes('portillo') || lower.includes('face') || lower.includes('bird')) {
+                return knowledgeBase.projects;
+            } else if (lower.includes('education') || lower.includes('degree') || lower.includes('university') || lower.includes('study')) {
+                return knowledgeBase.education;
+            } else if (lower.includes('award') || lower.includes('achievement') || lower.includes('competition') || lower.includes('prize')) {
+                return knowledgeBase.awards;
+            } else if (lower.includes('contact') || lower.includes('email') || lower.includes('phone') || lower.includes('reach')) {
+                return knowledgeBase.contact;
+            } else if (lower.includes('certification') || lower.includes('certificate')) {
+                return knowledgeBase.certifications;
+            } else if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+                return "Hello! 👋 I'm David's AI assistant. Ask me about his experience, skills, projects, or anything else!";
+            } else if (lower.includes('thank')) {
+                return "You're welcome! 😊 Feel free to ask if you need any more information about David.";
+            } else {
+                return knowledgeBase.default;
+            }
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
